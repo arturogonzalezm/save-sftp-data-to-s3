@@ -21,8 +21,9 @@ def lambda_handle(event, context):
         with SFTP(hostname=hostname, username=username, password=password, port=port) as sftp:
             sftp.chdir(ftp_dir)
             for key in sftp.listdir():
-                remote_file_path = os.path.join(ftp_dir, key)
-                with sftp.file(remote_file_path, 'rb', bufsize=-1) as body:
+                # file path on sftp
+                remote_file_path = os.path.normpath(os.path.join(ftp_dir, key)).replace('\\', '/')
+                with sftp.file(remote_file_path, 'rb') as body:
                     response = s3_client.put_object(
                         body=body,
                         bucket=bucket_name,
