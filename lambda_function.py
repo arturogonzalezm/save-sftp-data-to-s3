@@ -1,16 +1,12 @@
 import os
 import socket
-
 import boto3
-
 import paramiko
-
 from sftp import SFTP
 
 
 def lambda_handle(event, context):
     chunk_size = 12428800
-
     username = event['username']
     hostname = event['hostname']
     port = event.get('port') or 22
